@@ -1,14 +1,11 @@
-Nome do curso: Engenharia de Computacao
-Numero total de semestre: 3
-Departamento do curso: CIC
+Nome do curso: engenharia de computacao
+Numero total de semestre: 2
+Departamento do curso: cic
 ******************** Semestre 1 ********************
 1	C1	6	OBR	
-2	CB	6	OBR	
-3	IAL	4	OBR	
+2	ial	4	OBR	
+3	cb	6	OBR	
 ******************** Semestre 2 ********************
 4	C2	6	OBR	1	
-5	ED	4	OBR	2	1	
-6	EX	5	OPT	1	4	3	
-******************** Semestre 3 ********************
-7	C3	6	OBR	4	
+5	ed	4	OBR	3	
 ##

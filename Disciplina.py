@@ -38,5 +38,24 @@ class Disciplina:
         
     def adicionar_disciplinas_a_ser_verificadas(self, cod_disciplina):
         self.lista_disciplinas_a_ser_verificadas.append(cod_disciplina)
+    
+    def existe(self, lista, elemento):
+        for cod in lista:
+            if cod == elemento:
+                return True
+            else:
+                return False
         
+    def possui_os_pre_requisitos(self, listaPreReq):
+        listaCoincidencia = []
+        for cod1 in listaPreReq:
+            for cod2 in self.listar_disciplinas_cursadas:
+                if cod1 == cod2:
+                    listaCoincidencia.append(cod1)
+        if listaCoincidencia == listaPreReq:
+            return True
+        else:
+            return False
+                    
+                    
         

@@ -30,5 +30,23 @@ class Arquivo:
         arquivo = open(nomeCurso + '.txt', 'w')
         arquivo.writelines(texto)
         arquivo.close() 
-                              
+        
+        
+    def lerArquivo (self, nomeCurso):
+        arquivo = open(nomeCurso + '.txt', 'r')
+        texto = arquivo.readlines()
+        for informacao in texto:
+            print(informacao)
+        arquivo.close() 
+    
+    def lerSemestre(self, nomeCurso):
+        arquivo = open(nomeCurso + '.txt', 'r')
+        texto = arquivo.readline()
+        texto = arquivo.readlines()
+        for informacao in texto:
+            print(informacao)
+                
+                  
+        arquivo.close() 
+        
     

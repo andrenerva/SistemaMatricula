@@ -14,7 +14,13 @@ class CarregaGrafo:
         if not codigo_disciplina in self.lista_pre_requitos:
             self.lista_pre_requitos[codigo_disciplina] = []
         self.lista_pre_requitos[codigo_disciplina].append(codigo_pre_requisito)
-        
+    
+    
+    def recupera_dic_lista_disciplina(self, codigo_disciplina):
+        if codigo_disciplina in self.dic_lista_disciplinas:
+            return self.lista_pre_requitos[codigo_disciplina]
+        else:
+            return []
     
     def carrega (self, nomeCurso):
        
