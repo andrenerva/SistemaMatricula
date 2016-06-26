@@ -46,13 +46,13 @@ class Disciplina:
             else:
                 return False
         
-    def possui_os_pre_requisitos(self, listaPreReq):
+    def possui_os_pre_requisitos(self, informacoes_disciplina):
         listaCoincidencia = []
-        for cod1 in listaPreReq:
+        for cod1 in informacoes_disciplina:
             for cod2 in self.listar_disciplinas_cursadas:
                 if cod1 == cod2:
                     listaCoincidencia.append(cod1)
-        if listaCoincidencia == listaPreReq:
+        if listaCoincidencia == informacoes_disciplina:
             return True
         else:
             return False

@@ -42,9 +42,13 @@ class Arquivo:
     def lerSemestre(self, nomeCurso):
         arquivo = open(nomeCurso + '.txt', 'r')
         texto = arquivo.readline()
+        print (texto)
         texto = arquivo.readlines()
         for informacao in texto:
-            print(informacao)
+            if informacao[0] != '*':
+                print(informacao)
+            else:    
+                break
                 
                   
         arquivo.close() 

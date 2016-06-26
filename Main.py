@@ -3,15 +3,16 @@ from Curso import Curso
 from Arquivo import Arquivo
 from CarregaGrafo import CarregaGrafo
 from cProfile import label
+from distutils.log import INFO
 
 
 if __name__ == '__main__':
     
-    A = Arquivo()
-    CG = CarregaGrafo()
-    D = Disciplina(None, None, None, None)
-    
     while True:
+        
+        A = Arquivo()
+        CG = CarregaGrafo()
+        D = Disciplina(None, None, None, None)
         
         print('*************************** Sistema de Matriculas *******************************\n')
         print('(1) Cadastrar curso')
@@ -137,135 +138,154 @@ if __name__ == '__main__':
                 if resposta is 's':
                     D.adicionar_disciplinas_cursadas(cod)
                 else:
-                    D.adicionar_disciplinas_nao_cursadas(cod)
-                
-            #print('\n-> Lista de disciplinas cursadas pelo aluno: %s' %D.listar_disciplinas_cursadas)
-            #print('-> Lista de disciplinas nao cursadas pelo aluno: %s' %D.listar_disciplinas_nao_cursadas)
-           
-            for disciplina_nao_cursada in D.listar_disciplinas_nao_cursadas:
-                if CG.lista_pre_requitos.__contains__(disciplina_nao_cursada) is False:
-                    D.adicionar_disciplinas_a_ser_cursadas(disciplina_nao_cursada)
-                    
-                if CG.lista_pre_requitos.__contains__(disciplina_nao_cursada) is True:
-                    #print('fazer com as disciplinas com pre requisito')
-                    lista_para_ser_verificada = D.adicionar_disciplinas_a_ser_verificadas(disciplina_nao_cursada)
-                    
-                    
-                    
-            for disciplina in D.lista_disciplinas_a_ser_verificadas:
-                listaPre = D.recupera_pre_requisitos(disciplina)
-                resposta = D.possui_os_pre_requisitos(listaPre)
-                if resposta is True:
-                   D.adicionar_disciplinas_a_ser_cursadas(disciplina)
-            
-            contadorDecreditos = 0
-            listaDisProposta = []
-            listaFluxo = []
-            A.criarArq('Fluxo'+ nomeCurso)
-            semestre = 1
-            A.gravarNoArq('Fluxo' + nomeCurso, '**********************  semestre *********************************\n' )
-            semestre = semestre + 1
-            for codDisciplina in D.lista_disciplinas_a_ser_cursadas: 
-                    
-                listaPreReq = CG.dic_lista_disciplinas.get(codDisciplina)
-                credito = int(listaPreReq[1])
-                contadorDecreditos = contadorDecreditos + credito
-                
-                if contadorDecreditos <= credMax :
-                    
-                    A.gravarNoArq('Fluxo' + nomeCurso, codDisciplina)
-                    listaDisProposta.append(codDisciplina)
-                    A.gravarNoArq('Fluxo' + nomeCurso, '\t')
-                   
-                    for informacao in listaPreReq :
-                        A.gravarNoArq('Fluxo' + nomeCurso, informacao)
-                        A.gravarNoArq('Fluxo' + nomeCurso, '\t' )
-                
-                    A.gravarNoArq('Fluxo' + nomeCurso, '\n')
-                    
-                    
-            #print('-> Disciplinas a serem verificadas seus pre requisitos %s' %D.lista_disciplinas_a_ser_verificadas)   
-            #print('-> Disciplinas a serem cursadas: %s' %D.lista_disciplinas_a_ser_cursadas) 
-            print('VOCE DEVERA SEGUIR O SEMESTRE ABAIXO PARA CONCLUIR O CURSO EM MENOS TEMPO:\n')
-            A.lerSemestre('Fluxo' + nomeCurso)
-            print('UM ARQUIVO TEXTO COM ESSE FULXO FOI GERADO!!!')
-            #print('-> Disciplinas a serem cursadas: %s' %CG.lista_disciplinas)
-            
-            
-            #print(listaDisProposta)
-            
-            
-            listaFluxo = CG.lista_disciplinas.copy()
-            for cod1 in D.listar_disciplinas_cursadas:
-                listaFluxo.remove(cod1)
-            for cod2 in listaDisProposta:
-                listaFluxo.remove(cod2)
-            
-            print('-> Disciplinas a serem cursadas removidas: %s' %CG.lista_disciplinas)
-            
-            
-            #######################
-            #######################
-            ########################
-            ########################
+                    D.adicionar_disciplinas_nao_cursadas(cod)        
+    
+            A.criarArq('Fluxo' + nomeCurso)    
+            listaFluxo = D.listar_disciplinas_nao_cursadas.copy()     
             
             contadorDecreditos = 0
             semestre = 2
             A.gravarNoArq('Fluxo' + nomeCurso, '********************** semestre *********************************\n' ) 
             semestre = semestre + 1
+            creditos_restantes = 0
+            lista_semestre = []
             
-            for codDisciplina in listaFluxo: 
+            while listaFluxo != []:
                 
+                codDisciplina = listaFluxo[0]
+        
+                informacoes_disciplina = CG.dic_lista_disciplinas.get(codDisciplina)
+                credito = int(informacoes_disciplina[1])
+                lista_se_possui_pre_requisito = D.recupera_pre_requisitos(codDisciplina)
                 
-                    
-                listaPreReq = CG.dic_lista_disciplinas.get(codDisciplina)
-                credito = int(listaPreReq[1])
                 contadorDecreditos = contadorDecreditos + credito
+                listaFluxo_auxiliar = listaFluxo.copy()
                 
-                if contadorDecreditos <= credMax :
-                    
+                                
+                if credito > creditos_restantes:
                 
-                    A.gravarNoArq('Fluxo' + nomeCurso, codDisciplina)
-                    A.gravarNoArq('Fluxo' + nomeCurso, '\t')
-                    
-                    #print(credito)
-                    #print(contadorDecreditos)
-                    for informacao in listaPreReq :
-                        A.gravarNoArq('Fluxo' + nomeCurso, informacao)
-                        A.gravarNoArq('Fluxo' + nomeCurso, '\t' )
+                    tamanho_lista_auxiliar = len(listaFluxo_auxiliar)
                 
-                    A.gravarNoArq('Fluxo' + nomeCurso, '\n')
+                    while ((creditos_restantes > 0) and (tamanho_lista_auxiliar >= 0)):
+                        
+                        for cod_disciplina in listaFluxo_auxiliar:
+                            
+                            informacoes_disciplina_complemento = CG.dic_lista_disciplinas.get(cod_disciplina)
+                            creditos_complemento = int(informacoes_disciplina_complemento[1])
+                            
+                            if creditos_complemento <= creditos_restantes:
+                                contadorDecreditos = contadorDecreditos - credito                                
+                                lista_pre_req = D.recupera_pre_requisitos(cod_disciplina)
+                                
+                                if len(lista_pre_req) == 0:
+                                    A.gravarNoArq('Fluxo' + nomeCurso, cod_disciplina + '\t')
+                                    A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina_complemento[0] + '\t')
+                                    A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina_complemento[1] + '\t')
+                                    A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina_complemento[2] + '\n')
+                                    listaFluxo.remove(cod_disciplina)
+                                    creditos_restantes = creditos_restantes - creditos_complemento
+                                    contadorDecreditos = contadorDecreditos + creditos_complemento
+                                    
+                                    if contadorDecreditos >= credMax:
+                                        contadorDecreditos = credMax + 1
+                                    
+                                    break
+                                    
+                                else:
+                                    achou = 0
+                                    
+                                    for cod in listaFluxo_auxiliar:
+                                        for pre_req in lista_pre_req:
+                                            if cod == pre_req:
+                                                achou = 1
+                                            
+                                    if achou == 0:        
+                                        A.gravarNoArq('Fluxo' + nomeCurso, cod_disciplina + '\t')
+                                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina_complemento[0] + '\t')
+                                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina_complemento[1] + '\t')
+                                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina_complemento[2] + '\n')
+                                        listaFluxo.remove(cod_disciplina)
+                                        creditos_restantes = creditos_restantes - creditos_complemento
+                                        contadorDecreditos = contadorDecreditos + creditos_complemento
+                                        break
+                                        
+                        tamanho_lista_auxiliar = tamanho_lista_auxiliar - 1
+                                    
+                if contadorDecreditos <= credMax:
+                
+                    creditos_restantes = credMax - contadorDecreditos
+                
+                    if len(lista_se_possui_pre_requisito) == 0:
+                        A.gravarNoArq('Fluxo' + nomeCurso, codDisciplina + '\t')
+                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[0] + '\t')
+                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[1] + '\t')
+                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[2] + '\n')
+                        lista_semestre.append(codDisciplina)
+                        listaFluxo.remove(codDisciplina)
+                        
+                    else:
+                        achou = 0
+                        achou_no_mesmo_semestre = 0
+                        
+                        for cod in listaFluxo:
+                            for pre_req in lista_se_possui_pre_requisito:
+                                if cod == pre_req:
+                                    achou = 1
+                                    
+                        for cod in lista_semestre:
+                            for pre_req in lista_se_possui_pre_requisito:
+                                if cod == pre_req:
+                                    achou_no_mesmo_semestre = 1            
+                        
+                        if achou_no_mesmo_semestre == 1:
+                            listaFluxo.remove(codDisciplina)
+                            if len(listaFluxo) < 5:
+                                listaFluxo.insert(1, codDisciplina)
+                                contadorDecreditos = contadorDecreditos - credito
+                            else:
+                                listaFluxo.insert(5, codDisciplina)
+                                contadorDecreditos = contadorDecreditos - credito
+                        else: 
+                            if achou == 0:
+                                A.gravarNoArq('Fluxo' + nomeCurso, codDisciplina + '\t')
+                                A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[0] + '\t')
+                                A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[1] + '\t')
+                                A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[2] + '\n')
+                                lista_semestre.append(codDisciplina)
+                                listaFluxo.remove(codDisciplina)
                 
                 if contadorDecreditos > credMax :
                     
-                    A.gravarNoArq('Fluxo' + nomeCurso, '********************** semestre *********************************\n' )
-                    semestre = semestre + 1
-                    
-                    
-                    if contadorDecreditos > credMax :
-                        A.gravarNoArq('Fluxo' + nomeCurso, codDisciplina)
-                        A.gravarNoArq('Fluxo' + nomeCurso , '\t')
-                        
-                        #print(credito)
-                        #print(contadorDecreditos)
-                        for informacao in listaPreReq :
-                            A.gravarNoArq('Fluxo' + nomeCurso, informacao)
-                            A.gravarNoArq('Fluxo' + nomeCurso, '\t' )
-                        A.gravarNoArq('Fluxo' + nomeCurso, '\n')
-                
                     contadorDecreditos = 0
-                
-                
+                    lista_semestre = []
                     
-                
-                
-                
-                
+                    A.gravarNoArq('Fluxo' + nomeCurso, '********************** semestre *********************************\n' )
+                    
+                    if len(lista_se_possui_pre_requisito) == 0:
+                        A.gravarNoArq('Fluxo' + nomeCurso, codDisciplina + '\t')
+                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[0] + '\t')
+                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[1] + '\t')
+                        A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[2] + '\n')
+                        listaFluxo.remove(codDisciplina)
+                        contadorDecreditos = credito
+                        
+                    else:
+                        achou = 0
+                        
+                        for cod in listaFluxo:
+                            for pre_req in lista_se_possui_pre_requisito:
+                                if cod == pre_req:
+                                    achou = 1
+                        
+                        if achou == 0:
+                            A.gravarNoArq('Fluxo' + nomeCurso, codDisciplina + '\t')
+                            A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[0] + '\t')
+                            A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[1] + '\t')
+                            A.gravarNoArq('Fluxo' + nomeCurso, informacoes_disciplina[2] + '\n')
+                            listaFluxo.remove(codDisciplina)
+                            contadorDecreditos = credito
+                    
+                    lista_semestre.append(codDisciplina)            
+                            
             A.gravarNoArq('Fluxo' + nomeCurso, '*******************************************************************\n' )  
-            
-            
-            
-        
-
-            
-            
+            A.lerSemestre('Fluxo' + nomeCurso)

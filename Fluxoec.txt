@@ -1,0 +1,28 @@
+********************** semestre *********************************
+113034	CALCULO 1	6	OBR
+113093	INTRODUCAO A ALGEBRA LINEAR	4	OBR
+********************** semestre *********************************
+113476	ALGORITMOS PROGR COMPUTADORES	6	OBR
+117528	INTRO À ENG DE COMPUTAÇÃO	2	OBR
+118010	FISICA 1 EXPERIMENTAL	2	OBR
+********************** semestre *********************************
+118001	FISICA 1	4	OBR
+113042	CALCULO 2	6	OBR
+********************** semestre *********************************
+115045	PROBABILIDADE E ESTATISTICA	6	OBR
+116319	ESTRUTURAS DE DADOS	4	OBR
+********************** semestre *********************************
+113051	CALCULO 3	6	OBR
+118028	FISICA 2	4	OBR
+********************** semestre *********************************
+118036	FISICA 2 EXPERIMENTAL	4	OBR
+113301	EQUACOES DIFERENCIAIS 1	4	OBR
+********************** semestre *********************************
+117242	INTRODUCAO AO PROC DE IMAGENS	4	OPT
+201600	MÉTODOS DE PROGRAMAÇÃO	4	OBR
+********************** semestre *********************************
+170054	INTR A ATIVIDADE EMPRESARIAL	4	OPT
+116327	ORGANIZAÇÃO DE ARQUIVOS	4	OBR
+********************** semestre *********************************
+206075	SINAIS E SISTEMAS	4	OBR
+*******************************************************************
